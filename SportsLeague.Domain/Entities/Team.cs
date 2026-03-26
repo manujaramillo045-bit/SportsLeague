@@ -10,5 +10,6 @@
 
         // Navigation Property - Colección de jugadores
         public ICollection<Player> Players { get; set; } = new List<Player>(); // nueva lista de jugadores que esta en la entidad player. Sería la relacion 1:N entre Team y Player, donde un equipo puede tener muchos jugadores.
+        public ICollection<TournamentTeam> TournamentTeams { get; set; } = new List<TournamentTeam>(); // se conecta con la tabla intermedia
     }
 }
