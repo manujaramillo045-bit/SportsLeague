@@ -18,10 +18,10 @@ namespace SportsLeague.DataAccess.Context
         // se actualiza por la nuevas entidades, Referee, Tournament y TournamentTeam
 
         public DbSet<Referee> Referees => Set<Referee>(); 
-
         public DbSet<Tournament> Tournaments => Set<Tournament>(); 
-
         public DbSet<TournamentTeam> TournamentTeams => Set<TournamentTeam>(); 
+        public DbSet<Sponsor> Sponsors => Set<Sponsor>(); // NUEVO
+        public DbSet<TournamentSponsor> TournamentSponsors => Set<TournamentSponsor>(); // NUEVO
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -252,8 +252,47 @@ namespace SportsLeague.DataAccess.Context
 
             });
 
-        }
+            // Sponsor Configuration 
 
+            modelBuilder.Entity<Sponsor>()
+             .HasIndex(s => s.Name) // evita 2 sponsor con el mismo nombre
+             .IsUnique();
+
+            // TournamentSponsor configuration
+
+            modelBuilder.Entity<TournamentSponsor>(entity =>
+            {
+                entity.HasKey(ts => ts.Id);
+
+                entity.Property(ts => ts.ContractAmount)
+                    .IsRequired();
+
+                entity.Property(ts => ts.JoinedAt)
+                    .IsRequired();
+
+                entity.Property(ts => ts.CreatedAt)
+                    .IsRequired();
+
+                entity.Property(ts => ts.UpdatedAt)
+                    .IsRequired(false);
+
+                // Relación con Tournament
+                entity.HasOne(ts => ts.Tournament)
+                    .WithMany(t => t.TournamentSponsors)
+                    .HasForeignKey(ts => ts.TournamentId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Relación con Sponsor
+                entity.HasOne(ts => ts.Sponsor)
+                    .WithMany(s => s.TournamentSponsors)
+                    .HasForeignKey(ts => ts.SponsorId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // índice único compuesto: NO se puede permitir que este 2 veces
+                entity.HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
+                    .IsUnique();
+            });
+        }
     }
 }
 

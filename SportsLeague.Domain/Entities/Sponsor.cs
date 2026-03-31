@@ -16,7 +16,7 @@ namespace SportsLeague.Domain.Entities
 
 
         // Navigation Property - Colección de torneos patrocinados
-        public ICollection<TournamentSponsor> TournamentSponsor { get; set; } = new List<TournamentSponsor>(); // nueva lista de torneos patrocinados que esta en la entidad tournament sponsor. Sería la relacion 1:N entre Sponsor y TournamentSponsor, donde un sponsor puede patrocinar muchos torneos a través de la tabla intermedia TournamentSponsor.
+        public ICollection<TournamentSponsor> TournamentSponsors { get; set; } = new List<TournamentSponsor>(); // nueva lista de torneos patrocinados que esta en la entidad tournament sponsor. Sería la relacion 1:N entre Sponsor y TournamentSponsor, donde un sponsor puede patrocinar muchos torneos a través de la tabla intermedia TournamentSponsor.
         // navega a la tabla intermedia, no a tournament directamente porque es una relación de muchos a muchos entre sponsor y tournament, por lo que necesitamos la tabla intermedia para manejar esta relación de manera adecuada.
     }
 }
