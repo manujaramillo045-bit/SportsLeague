@@ -265,7 +265,9 @@ namespace SportsLeague.DataAccess.Context
                 entity.HasKey(ts => ts.Id);
 
                 entity.Property(ts => ts.ContractAmount)
-                    .IsRequired();
+                    .IsRequired()
+                    .HasPrecision(18, 2);
+
 
                 entity.Property(ts => ts.JoinedAt)
                     .IsRequired();
