@@ -252,51 +252,55 @@ namespace SportsLeague.DataAccess.Context
 
             });
 
-            // Sponsor Configuration 
+            // ── Sponsor Configuration ──
+            modelBuilder.Entity<Sponsor>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(200);
+                entity.HasIndex(e => e.Name)
+                    .IsUnique();
+                entity.Property(e => e.ContactEmail)
+                    .IsRequired()
+                    .HasMaxLength(200);
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(20);
+                entity.Property(e => e.WebsiteUrl)
+                    .HasMaxLength(500);
+                entity.Property(e => e.Category)
+                    .IsRequired();
+                // CreatedAt y UpdatedAt ya vienen de AuditBase
+            });
 
-            modelBuilder.Entity<Sponsor>()
-             .HasIndex(s => s.Name) // evita 2 sponsor con el mismo nombre
-             .IsUnique();
-
-            // TournamentSponsor configuration
-
+            // ── TournamentSponsor Configuration ──
             modelBuilder.Entity<TournamentSponsor>(entity =>
             {
-                entity.HasKey(ts => ts.Id);
+                entity.HasKey(e => e.Id);
 
-                entity.Property(ts => ts.ContractAmount)
-                    .IsRequired()
-                    .HasPrecision(18, 2);
-
-
-                entity.Property(ts => ts.JoinedAt)
-                    .IsRequired();
-
-                entity.Property(ts => ts.CreatedAt)
-                    .IsRequired();
-
-                entity.Property(ts => ts.UpdatedAt)
-                    .IsRequired(false);
-
-                // Relación con Tournament
-                entity.HasOne(ts => ts.Tournament)
+                entity.HasOne(e => e.Tournament)
                     .WithMany(t => t.TournamentSponsors)
-                    .HasForeignKey(ts => ts.TournamentId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .HasForeignKey(e => e.TournamentId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
-                // Relación con Sponsor
-                entity.HasOne(ts => ts.Sponsor)
+                entity.HasOne(e => e.Sponsor)
                     .WithMany(s => s.TournamentSponsors)
-                    .HasForeignKey(ts => ts.SponsorId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .HasForeignKey(e => e.SponsorId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
-                // índice único compuesto: NO se puede permitir que este 2 veces
-                entity.HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
+                entity.HasIndex(e => new { e.TournamentId, e.SponsorId })
                     .IsUnique();
+
+                entity.Property(e => e.ContractAmount)
+                    .HasPrecision(18, 2)
+                    .IsRequired();
+
+                entity.Property(e => e.JoinedAt)
+                    .IsRequired();
+                // CreatedAt y UpdatedAt ya vienen de AuditBase
             });
+
         }
+
     }
 }
-
-
-
