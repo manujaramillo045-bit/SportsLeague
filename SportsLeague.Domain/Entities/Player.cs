@@ -15,5 +15,7 @@ namespace SportsLeague.Domain.Entities
 
         // Navigation Property
         public Team Team { get; set; } = null!; // team es la propiedad de navegación que permite acceder al equipo al que pertenece el jugador. El operador null! se utiliza para indicar que esta propiedad no puede ser nula, lo que es importante para garantizar la integridad de los datos y evitar errores en tiempo de ejecución.
+        public ICollection<Goal> Goals { get; set; } = new List<Goal>();
+        public ICollection<Card> Cards { get; set; } = new List<Card>();
     }
 }
