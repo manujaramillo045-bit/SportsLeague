@@ -2,9 +2,6 @@
 using SportsLeague.DataAccess.Context;
 using SportsLeague.Domain.Entities;
 using SportsLeague.Domain.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SportsLeague.DataAccess.Repositories;
 
@@ -61,6 +58,17 @@ public class GenericRepository<T> : IGenericRepository<T> where T : AuditBase //
     public async Task<bool> ExistsAsync(int id) //6. ExistsAsync: este método recibe el id de una entidad del tipo T, y devuelve un valor booleano que indica si existe o no una entidad con ese id en la base de datos, usando el método AnyAsync() para verificar si hay alguna entidad que cumpla con la condición de tener el id especificado.
     {
         return await _dbSet.AnyAsync(e => e.Id == id); // recibe un id, y devuelve un valor booleano que indica si existe o no una entidad con ese id en la base de datos, usando el método AnyAsync() para verificar si hay alguna entidad que cumpla con la condición de tener el id especificado, lo que permite saber si una entidad existe o no en la base de datos sin necesidad de cargar toda la entidad, lo que mejora el rendimiento y la eficiencia de la aplicacion.
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<T> AddAsync(T entity)
+    {
+        await _dbSet.AddAsync(entity);
+        return entity;
     }
 }
 
