@@ -33,6 +33,24 @@ namespace SportsLeague.API.Mappings
                     opt => opt.MapFrom(src =>
                         src.TournamentTeams != null ? src.TournamentTeams.Count : 0)); //Condición ternaria
 
+            CreateMap<SponsorRequestDTO, Sponsor>();
+            CreateMap<Sponsor, SponsorResponseDTO>();
+
+            // TOURNAMENT SPONSOR 
+            CreateMap<TournamentSponsorRequestDTO, TournamentSponsor>()
+                .ForMember(dest => dest.JoinedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.Tournament, opt => opt.Ignore())
+                .ForMember(dest => dest.Sponsor, opt => opt.Ignore());
+
+            CreateMap<TournamentSponsor, TournamentSponsorResponseDTO>()
+                .ForMember(dest => dest.TournamentName,
+                    opt => opt.MapFrom(src => src.Tournament != null ? src.Tournament.Name : string.Empty))
+                .ForMember(dest => dest.SponsorName,
+                    opt => opt.MapFrom(src => src.Sponsor != null ? src.Sponsor.Name : string.Empty));
+
             // Match mappings
             CreateMap<MatchRequestDTO, Match>();
             CreateMap<Match, MatchResponseDTO>()
@@ -62,6 +80,15 @@ namespace SportsLeague.API.Mappings
                 .ForMember(dest => dest.PlayerName,
                     opt => opt.MapFrom(src =>
                         src.Player.FirstName + " " + src.Player.LastName));
+
+            // ==================== MATCH LINEUP MAPPINGS (EVENTO #4) ====================
+
+            // Mapeo: RequestDTO de API -> RequestDTO del Service
+            CreateMap<MatchLineupRequestDTO, Domain.Services.MatchLineupRequestDTO>();
+
+            // Mapeo: ResponseDTO del Service -> ResponseDTO de API
+            CreateMap<Domain.Services.MatchLineupResponseDTO, MatchLineupResponseDTO>();
         }
     }
 }
+
