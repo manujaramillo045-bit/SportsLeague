@@ -4,7 +4,6 @@ using SportsLeague.Domain.Interfaces.Repositories;
 
 namespace SportsLeague.Domain.Services
 {
-   
     public class MatchLineupRequestDTO
     {
         public int PlayerId { get; set; }
@@ -79,13 +78,15 @@ namespace SportsLeague.Domain.Services
             await _matchLineupRepository.AddAsync(matchLineup);
             await _matchLineupRepository.SaveChangesAsync();
 
+            var playerWithTeam = await GetPlayerWithTeamAsync(dto.PlayerId);
+
             return new MatchLineupResponseDTO
             {
                 Id = matchLineup.Id,
                 MatchId = matchLineup.MatchId,
                 PlayerId = matchLineup.PlayerId,
-                PlayerName = $"{player.FirstName} {player.LastName}",
-                TeamName = player.Team?.Name ?? "Sin equipo",
+                PlayerName = $"{playerWithTeam?.FirstName} {playerWithTeam?.LastName}" ?? "N/A",
+                TeamName = playerWithTeam?.Team?.Name ?? "Sin equipo",
                 IsStarter = matchLineup.IsStarter,
                 Position = matchLineup.Position
             };
@@ -127,6 +128,13 @@ namespace SportsLeague.Domain.Services
         {
             await _matchLineupRepository.DeleteAsync(lineupId);
             await _matchLineupRepository.SaveChangesAsync();
+        }
+
+        private async Task<Player?> GetPlayerWithTeamAsync(int playerId)
+        {
+          
+            var allPlayers = await _playerRepository.GetAllAsync();
+            return allPlayers.FirstOrDefault(p => p.Id == playerId);
         }
     }
 }

@@ -45,5 +45,12 @@ namespace SportsLeague.DataAccess.Repositories
             .Include(p => p.Team)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        public async Task<Player?> GetPlayerWithTeamAsync(int id)
+        {
+            return await _dbSet
+                .Include(p => p.Team)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
     }
 }
