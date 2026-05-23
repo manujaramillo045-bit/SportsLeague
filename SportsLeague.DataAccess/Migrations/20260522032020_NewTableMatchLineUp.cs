@@ -61,3 +61,4 @@ namespace SportsLeague.DataAccess.Migrations
         }
     }
 }
+                                                    

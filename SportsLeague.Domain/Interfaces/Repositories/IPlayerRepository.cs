@@ -10,5 +10,6 @@ namespace SportsLeague.Domain.Interfaces.Repositories
         Task<Player?> GetByTeamAndNumberAsync(int teamId, int number); // obtener un jugador por equipo y número, se le pasa el id del equipo y el número del jugador, y devuelve el jugador que coincide con esos criterios
         Task<IEnumerable<Player>> GetAllWithTeamAsync(); // obtener todos los jugadores con su equipo, devuelve una lista de jugadores con la información de su equipo incluida, lo que permite acceder a los detalles del equipo al que pertenece cada jugador
         Task<Player?> GetByIdWithTeamAsync(int id); // obtener un jugador por su id con la información de su equipo, se le pasa el id del jugador y devuelve el jugador que coincide con ese id, incluyendo la información de su equipo, lo que permite acceder a los detalles del equipo al que pertenece el jugador
+        Task<Player?> GetPlayerWithTeamAsync(int id); 
     }
 }
